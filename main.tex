@@ -1,0 +1,1716 @@
+
+\documentclass[12pt,a4paper]{article}
+
+% ==============================================================================
+% PACKAGES
+% ==============================================================================
+
+\usepackage[a4paper,margin=1in]{geometry}
+
+% Actual Times New Roman font
+% Compile using XeLaTeX or LuaLaTeX
+\usepackage{fontspec}
+\setmainfont{Times New Roman}
+\setsansfont{Times New Roman}
+\setmonofont{Times New Roman}
+
+\usepackage{graphicx}
+\usepackage{setspace}
+\usepackage{ragged2e}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{longtable}
+\usepackage{multirow}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{caption}
+\usepackage{tocloft}
+\usepackage{float}
+\usepackage{enumitem}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{url}
+
+% ==============================================================================
+% BLACK TEXT THROUGHOUT
+% ==============================================================================
+
+\color{black}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=black,
+    citecolor=black,
+    urlcolor=black
+}
+
+% ==============================================================================
+% PAGE SETTINGS
+% ==============================================================================
+
+\setstretch{1.5}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.4em}
+
+\renewcommand{\cftsecleader}{\cftdotfill{\cftdotsep}}
+
+% Section formatting
+\titleformat{\section}
+    {\normalfont\bfseries\fontsize{16}{19}\selectfont}
+    {\thesection}
+    {1em}
+    {}
+
+\titleformat{\subsection}
+    {\normalfont\bfseries\fontsize{14}{17}\selectfont}
+    {\thesubsection}
+    {1em}
+    {}
+
+\titleformat{\subsubsection}
+    {\normalfont\bfseries\fontsize{12}{15}\selectfont}
+    {\thesubsubsection}
+    {1em}
+    {}
+
+% ==============================================================================
+% CODE FORMATTING
+% ==============================================================================
+
+\lstset{
+    basicstyle=\small\fontfamily{ptm}\selectfont\color{black},
+    breaklines=true,
+    frame=none,
+    keywordstyle=\bfseries\color{black},
+    commentstyle=\itshape\color{black},
+    stringstyle=\itshape\color{black},
+    showstringspaces=false,
+    tabsize=2,
+    numbers=none
+}
+
+% ==============================================================================
+% HEADER AND FOOTER
+% ==============================================================================
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0pt}
+
+% ==============================================================================
+% FIGURE PLACEHOLDER COMMAND
+% ==============================================================================
+
+\newcommand{\projectfigure}[3]{
+\begin{figure}[H]
+    \centering
+    \IfFileExists{#1}{
+        \includegraphics[width=#2\textwidth]{#1}
+    }{
+        \fbox{
+            \parbox[c][5cm][c]{#2\textwidth}{
+                \centering
+                \textbf{Figure Placeholder}\\[0.3cm]
+                #3
+            }
+        }
+    }
+    \caption{#3}
+    \label{fig:#1}
+\end{figure}
+}
+
+% ==============================================================================
+% DOCUMENT
+% ==============================================================================
+
+\begin{document}
+
+% ==============================================================================
+% 1. TITLE PAGE
+% ==============================================================================
+
+\begin{titlepage}
+    \centering
+    \setstretch{1.3}
+
+    {\bfseries \Large
+    SCALABLE SENTIMENT ANALYSIS ON TWITTER DATA\\
+    USING APACHE SPARK AND RANDOM FOREST
+    \par}
+
+    \vspace{1 cm}
+
+    {\large \textit{A project report submitted as part of the course\\}
+    \textbf{PBADT 504 BIG DATA ANALYTICS} \par}
+
+    \vspace{1cm}
+
+    {\large \textbf{By}\par}
+
+    \vspace{0.3cm}
+
+    {\large
+    \begin{tabular}{c}
+        \textbf{MITHRAVINNDA U (VML24AD078)} \\
+        \textbf{MIDHUNA K (VML24AD076)} \\
+        \textbf{JISTO JOSE (VML24AD065)} \\
+        \textbf{MAYUG B (VML24AD074)} \\
+        \textbf{MUHAMMED NASIF CP (VML24AD082)} \\
+        \textbf{JOEL MATHEW SAJI (VML24AD067)}
+    \end{tabular}
+    \par}
+
+    \vspace{0.1cm}
+
+    \IfFileExists{Vmllogo.png}{
+        \includegraphics[width=7.5cm]{Vmllogo.png}
+    }{
+        \fbox{\parbox[c][4cm][c]{7cm}{\centering Vimal Jyothi Engineering College Logo}}
+    }
+
+    \vfill
+
+    {\bfseries \large
+    DEPARTMENT OF COMPUTER SCIENCE AND ENGINEERING\\
+    (ARTIFICIAL INTELLIGENCE AND DATA SCIENCE)\\
+    VIMAL JYOTHI ENGINEERING COLLEGE, CHEMPERI
+    \par}
+    {\large \textbf{SEPTEMBER 2026} \par}
+
+\end{titlepage}
+
+% ==============================================================================
+% 2. CERTIFICATE PAGE
+% ==============================================================================
+
+\newpage
+\thispagestyle{empty}
+
+\begin{center}
+    \setstretch{1.3}
+
+    \IfFileExists{vmllogo1.jpg}{
+        \includegraphics[width=14.5cm]{vmllogo1.jpg}
+    }{
+        \fbox{\parbox[c][3cm][c]{14cm}{\centering Vimal Jyothi Engineering College Logo}}
+    }
+
+    {\bfseries \large
+    DEPARTMENT OF COMPUTER SCIENCE AND ENGINEERING
+    \par}
+
+    \vspace{0.1cm}
+
+    {\bfseries \large
+    (ARTIFICIAL INTELLIGENCE AND DATA SCIENCE)
+    \par}
+
+    \vspace{1cm}
+
+    {\bfseries \Large CERTIFICATE \par}
+
+    \vspace{1cm}
+\end{center}
+
+\begin{justify}
+\sloppy
+\setlength{\parindent}{0pt}
+\setstretch{1.5}
+
+This is to certify that the report entitled ``\textbf{SCALABLE SENTIMENT ANALYSIS ON TWITTER DATA USING APACHE SPARK AND RANDOM FOREST}'' submitted by \textbf{MITHRAVINNDA U (VML24AD078)}, \textbf{MIDHUNA K (VML24AD076)}, \textbf{JISTO JOSE (VML24AD065)}, \textbf{MAYUG B (VML24AD074)}, \textbf{MUHAMMED NASIF CP (VML24AD082)}, and \textbf{JOEL MATHEW SAJI (VML24AD067)} to Vimal Jyothi Engineering College is a bonafide record of the project work carried out by them under our guidance and supervision.
+
+\vspace{0.5cm}
+
+This report is submitted as part of the requirements for the course \textbf{PBADT 504 Big Data Analytics} in the B.Tech Degree Programme in \textbf{Artificial Intelligence and Data Science} during the academic year 2025--26.
+
+\end{justify}
+
+\vspace{2.5cm}
+
+\noindent
+\begin{minipage}[t]{0.31\textwidth}
+    \setstretch{1.2}
+    \raggedright
+    \textbf{MS. ANUPAMA P M}\\[0.2cm]
+    \textbf{(Project Guide)}\\[0.2cm]
+    \small{ASSISTANT PROFESSOR}\\
+    \small{DEPT. OF CSE(ADS)}\\
+    \small{VIMAL JYOTHI ENGINEERING COLLEGE, CHEMPERI}
+\end{minipage}
+\hfill
+\begin{minipage}[t]{0.31\textwidth}
+    \setstretch{1.2}
+    \raggedright
+    \textbf{MS. NIMISHA U}\\[0.2cm]
+    \textbf{(Project Guide)}\\[0.2cm]
+    \small{ASSISTANT PROFESSOR}\\
+    \small{DEPT. OF CSE(ADS)}\\
+    \small{VIMAL JYOTHI ENGINEERING COLLEGE, CHEMPERI}
+\end{minipage}
+\hfill
+\begin{minipage}[t]{0.31\textwidth}
+    \setstretch{1.2}
+    \raggedright
+    \textbf{DR. MANOJ V THOMAS}\\[0.2cm]
+    \textbf{(Program Coordinator)}\\[0.2cm]
+    \small{PROFESSOR}\\
+    \small{DEPT. OF CSE(ADS)}\\
+    \small{VIMAL JYOTHI ENGINEERING COLLEGE, CHEMPERI}
+\end{minipage}
+% ==============================================================================
+% 3. DECLARATION PAGE
+% ==============================================================================
+
+\newpage
+\thispagestyle{empty}
+
+\begin{center}
+    \setstretch{1.3}
+    {\bfseries \Large DECLARATION \par}
+    \vspace{1.5cm}
+\end{center}
+
+\begin{justify}
+\sloppy
+\setstretch{1.5}
+\setlength{\parindent}{0pt}
+
+We hereby declare that the project report ``\textbf{Scalable Sentiment Analysis on Twitter Data Using Apache Spark and Random Forest}'' submitted for partial fulfillment of the requirements for the award of degree of Bachelor of Technology of the APJ Abdul Kalam Technological University, Kerala is a bonafide work done by us under supervision of \textbf{Ms. Anupama P M}. This submission represents the ideas in our words and where ideas or words of others have been included, we have adequately and accurately cited and referenced the original sources. We also declare that we have adhered to ethics of academic honesty and integrity and have not misrepresented or fabricated any data or idea or fact or source in our submission. We understand that any violation of the above will be a cause for disciplinary action by the institute or the university and can also evoke penal action from the sources which have thus not been properly cited or from whom proper permission has not been obtained. This report has not been previously formed the basis for the award of any degree, diploma or similar title of any other University.
+
+\end{justify}
+
+\vspace{2cm}
+
+\noindent
+\begin{minipage}[t]{0.35\textwidth}
+    \setstretch{1.3}
+    \textbf{Date:}\\[0.3cm]
+    \textbf{Place:} Chemperi
+\end{minipage}
+\hfill
+\begin{minipage}[t]{0.55\textwidth}
+    \setstretch{1.4}
+    \raggedleft
+    MITHRAVINNDA U (VML24AD078) \\[0.3cm]
+    MIDHUNA K (VML24AD076) \\[0.3cm]
+    JISTO JOSE (VML24AD065) \\[0.3cm]
+    MAYUG B (VML24AD074) \\[0.3cm]
+    MUHAMMED NASIF CP (VML24AD082) \\[0.3cm]
+    JOEL MATHEW SAJI (VML24AD067)
+\end{minipage}
+
+% ==============================================================================
+% 4. ACKNOWLEDGEMENT PAGE
+% ==============================================================================
+
+\newpage
+\thispagestyle{empty}
+
+\begin{center}
+    \setstretch{1.3}
+    {\bfseries \Large ACKNOWLEDGEMENT \par}
+    \vspace{1.5cm}
+\end{center}
+
+\begin{justify}
+\sloppy
+\setstretch{1.5}
+\setlength{\parindent}{0pt}
+
+The successful presentation of the project ``\textbf{SCALABLE SENTIMENT ANALYSIS ON TWITTER DATA USING APACHE SPARK AND RANDOM FOREST}'' would have been incomplete without the mention of the people who made it possible and whose constant guidance crowned our effort with success.
+
+We extend our sincere thanks to the Principal of Vimal Jyothi Engineering College, \textbf{Dr. BENNY JOSEPH}, for providing an excellent learning environment and the resources needed to pursue this project.
+
+We are particularly grateful to the Program Coordinator of Artificial Intelligence and Data Science, \textbf{Dr. MANOJ V THOMAS}, for his unwavering support and encouragement.
+
+Our immense appreciation goes to our project guide, \textbf{Ms. ANUPAMA P M}, for her constant encouragement, invaluable guidance, and expertise throughout the project. Her insights and support were instrumental in shaping the project and ensuring its successful completion.
+
+Last but not least, we express our deepest gratitude to our parents for their unwavering support and encouragement throughout our studies. Their personal sacrifices in providing us with this educational opportunity are deeply appreciated.
+
+\end{justify}
+
+% % ============================================================
+% ABSTRACT
+% ============================================================
+\newpage
+\thispagestyle{empty}
+
+\begin{center}
+
+{\bfseries
+\fontsize{16}{19}\selectfont
+ABSTRACT
+\par}
+
+\end{center}
+
+\vspace{0.3in}
+
+\begin{justify}
+\sloppy
+\setstretch{1.5}
+\setlength{\parindent}{0pt}
+
+This project presents a scalable sentiment analysis system using Apache Spark (PySpark) and Random Forest to analyze large-scale Twitter data. The Sentiment140 dataset, containing 1.6 million labeled tweets, is processed through text cleaning, tokenization, stopword removal, and TF-IDF feature extraction. The data is divided into 80\% training and 20\% testing, and the Random Forest classifier achieves an accuracy of approximately 66.52\% in classifying tweets as positive or negative. An interactive interface is also developed for real-time sentiment prediction. The project demonstrates the effective application of Big Data, Natural Language Processing (NLP), Machine Learning, Apache Spark, and distributed data processing for social media sentiment analysis.
+
+\textbf{Keywords:} Big Data, Apache Spark, PySpark, Sentiment Analysis, Random Forest, Machine Learning, Natural Language Processing (NLP), TF-IDF, Sentiment140, Twitter Data.
+\end{justify}
+
+\newpage
+
+% ==============================================================================
+% TABLE OF CONTENTS
+% ==============================================================================
+
+\newpage
+\thispagestyle{empty}
+
+\setstretch{1.3}
+\tableofcontents
+
+
+
+% ============================================================
+% LIST OF FIGURES
+% ============================================================
+
+\listoffigures
+
+
+% ============================================================
+% LIST OF TABLES
+% ============================================================
+
+\listoftables
+
+\newpage
+% ==============================================================================
+% CHAPTER 1
+% ==============================================================================
+
+\newpage
+\setcounter{page}{1}
+
+\section{INTRODUCTION}
+
+\subsection{Background}
+
+The rapid growth of social media has generated a massive amount of user-generated textual data every day. Platforms such as Twitter provide valuable information about opinions, reactions, experiences, and emotions. However, the large volume and unstructured nature of this data make manual analysis difficult. Sentiment analysis, a Natural Language Processing (NLP) technique, helps identify the emotional orientation of text by classifying it into categories such as positive and negative.
+
+This project combines Apache Spark, PySpark, NLP techniques, and the Random Forest classification algorithm to develop a scalable sentiment analysis system for Twitter data. The Sentiment140 dataset, containing 1.6 million tweets, is processed through a complete pipeline involving text preprocessing, feature extraction, model training, and sentiment prediction. Apache Spark enables efficient distributed processing of the large dataset, demonstrating the application of Big Data technologies for large-scale sentiment analysis.
+
+
+\subsection{Motivation}
+
+The primary motivation of the project is the need to automatically understand the sentiment expressed in large-scale social media data. A large collection of tweets may contain useful information regarding public reactions, opinions, experiences, and preferences. Manually analyzing millions of tweets is impractical.
+
+Another motivation is to demonstrate the use of Big Data technologies in a practical machine learning problem. Sentiment analysis is a suitable application because it combines large-scale data processing with Natural Language Processing and classification.
+
+The project also provides an opportunity to understand the complete machine learning workflow in PySpark. Instead of processing only a small sample using conventional Python libraries, the project uses Spark DataFrames and Spark ML components to perform text transformation and machine learning.
+
+
+
+\subsection{Project Overview}
+
+The implemented system consists of several major stages.
+
+First, the Sentiment140 dataset is loaded into a Spark DataFrame using a predefined schema. The dataset contains 1,600,000 records. The relevant target and text columns are selected for sentiment classification.
+
+Second, the original target values are converted into binary labels. The original value 0 represents negative sentiment, while the original value 4 is converted to the positive label 1.
+
+Third, text preprocessing is performed. User mentions, URLs, punctuation, and non-alphanumeric characters are removed using a regular-expression-based cleaning operation.
+
+Fourth, the cleaned text is tokenized and stopwords are removed. The words ``not'', ``no'', and ``never'' are deliberately retained because they may carry important sentiment information.
+
+Fifth, the processed words are converted into numerical features using HashingTF and IDF. The HashingTF stage uses 10,000 features.
+
+Sixth, the resulting dataset is divided into training and testing sets in the ratio 80:20.
+
+Seventh, a Random Forest classifier with 20 trees and maximum depth 8 is trained.
+
+Finally, the predictions are evaluated using accuracy, weighted precision, weighted recall, and F1-score. Additional outputs include sentiment distribution, confusion matrix, feature importance, sample predictions, saved model files, prediction output, and a live sentiment analyzer.
+
+\subsection{Need for Big Data Technologies}
+
+The Sentiment140 dataset used in this project contains 1.6 million tweets. Processing such a dataset involves a large number of text records and multiple transformation stages. Big Data technologies are useful because they provide tools for processing large datasets efficiently.
+
+Apache Spark provides DataFrame-based data processing and machine learning components through Spark ML. PySpark allows these capabilities to be accessed through Python.
+
+The use of Spark also provides a unified environment in which data loading, transformation, feature extraction, model training, and prediction can be performed. In this project, Spark is configured using:
+
+\begin{lstlisting}[language=Python]
+spark = SparkSession.builder \
+    .appName("Sentiment140") \
+    .master("local[*]") \
+    .getOrCreate()
+\end{lstlisting}
+
+The \texttt{local[*]} configuration allows Spark to use the available local processing cores in the execution environment.
+
+
+% ==============================================================================
+% CHAPTER 2
+% ==============================================================================
+\newpage
+\section{PROBLEM STATEMENT, OBJECTIVES AND SCOPE}
+
+\subsection{Problem Statement}
+
+Social media platforms generate large volumes of unstructured textual data. Although this data contains valuable information about user opinions and sentiment, the information cannot be efficiently extracted through manual inspection when the dataset becomes very large.
+
+The problem considered in this project is to design a scalable system that processes a large collection of Twitter messages and automatically classifies them as positive or negative.
+
+The system must address three major requirements:
+
+\begin{enumerate}
+    \item Efficient processing of large-scale textual data.
+    \item Conversion of unstructured text into machine-readable numerical features.
+    \item Classification and evaluation of sentiment using a machine learning model.
+\end{enumerate}
+
+\subsection{Problem Definition}
+
+Given a collection of tweets with corresponding sentiment labels, the task is to learn a classification function:
+
+\[
+f(X) \rightarrow Y
+\]
+
+where:
+
+\begin{itemize}
+    \item $X$ represents the textual features extracted from a tweet.
+    \item $Y$ represents the sentiment class.
+\end{itemize}
+
+The sentiment label is binary:
+
+\[
+Y \in \{0,1\}
+\]
+
+where:
+
+\[
+0 = \text{Negative}
+\]
+
+and
+
+\[
+1 = \text{Positive}
+\]
+
+The machine learning model learns the relationship between the numerical representation of tweets and their corresponding sentiment labels using the training dataset.
+
+\subsection{Objectives}
+
+\textbf{Dataset Acquisition and Loading Objective}
+
+The first objective is to load the Sentiment140 dataset into a Spark DataFrame. A predefined schema is used to represent the fields of the original CSV file.
+
+\textbf{Data Understanding Objective}
+
+The project examines the structure and content of the dataset and identifies the fields required for sentiment classification.
+
+\textbf{Text Preprocessing Objective}
+
+The raw Twitter text contains usernames, URLs, punctuation, and other textual noise. The project removes these elements to obtain a cleaner representation of the text.
+
+\textbf{Distributed Processing Objective}
+
+The project uses PySpark DataFrames and Spark ML components for large-scale data processing and transformation.
+
+\textbf{Feature Extraction Objective}
+
+The cleaned textual content is transformed into numerical feature vectors using Tokenizer, StopWordsRemover, HashingTF, and IDF.
+
+\textbf{Sentiment Classification Objective}
+
+A Random Forest classifier is trained using the generated feature vectors and corresponding binary sentiment labels.
+
+\textbf{Model Evaluation Objective}
+
+The trained classifier is evaluated using accuracy, weighted precision, weighted recall, and F1-score.
+
+\textbf{Visualization and Interpretation Objective}
+
+The project generates visual representations and analytical outputs including sentiment distribution and confusion matrix results.
+
+\subsection{Scope of the Project}
+
+The project focuses specifically on binary sentiment classification of Twitter text.
+
+The scope is limited to the dataset and processing pipeline implemented in the notebook. It includes data loading, text preprocessing, feature generation, Random Forest classification, evaluation, prediction, visualization, and model storage.
+
+The project does not include:
+
+\begin{itemize}
+    \item Real-time Twitter API data collection.
+    \item Multiclass sentiment classification.
+    \item Emotion classification.
+    \item Sarcasm detection.
+    \item Transformer-based models.
+    \item Deep learning models.
+    \item Multilingual translation.
+    \item Live Twitter streaming.
+\end{itemize}
+
+% literature review%
+\newpage
+\section{LITERATURE SURVEY}
+
+\textbf{Twitter Sentiment Classification using Distant Supervision}\\
+
+The foundational groundwork for automated Twitter sentiment classification was established by Go, Bhayani, and Huang (2009) through their seminal research on distant supervision. The authors introduced an innovative approach to solve the manual annotation bottleneck in social media datasets by utilizing emoticons present in raw tweets (such as \texttt{:) } for positive and \texttt{:(} for negative) as noisy target labels. This automated labeling technique resulted in the creation of the Sentiment140 dataset---comprising 1.6 million annotated tweets---which serves as the central data foundation for this project. In their experiments, Go et al. evaluated classical supervised algorithms, including Na\"{\i}ve Bayes, Maximum Entropy, and Support Vector Machines (SVM), demonstrating that machine learning models can effectively learn sentiment boundaries from noisy social media text and achieve classification accuracies exceeding 80\% on clean benchmark evaluations.
+
+Beyond dataset generation, their study highlighted the critical necessity of domain-specific text preprocessing for microblogging data. Twitter content presents unique noise vectors---such as arbitrary user mentions (\texttt{@user}), embedded hyperlink URLs, informal punctuation, and non-alphanumeric symbols---that obscure true textual semantics if left uncleaned. Go et al. proved that systematically stripping these elements prevents machine learning models from over-fitting on non-informative tokens. This two-fold contribution directly provides both the benchmark Sentiment140 dataset and the structural blueprint for the regular-expression cleaning, token filtering, and binary sentiment labeling strategy implemented within this project's PySpark pipeline.\\
+
+\textbf{Apache Spark for Large-Scale Data Processing}\\
+
+While single-node machine learning algorithms were effective for early benchmark experiments, they encountered severe memory, CPU, and disk I/O bottlenecks when attempting to process multi-million-row text datasets. To overcome these computational scaling limits, Zaharia et al. (2010) introduced Apache Spark, a high-throughput distributed computing framework centered on in-memory cluster execution via Resilient Distributed Datasets (RDDs). Spark fundamentally addressed the severe disk latency constraints inherent in traditional Hadoop MapReduce systems by enabling intermediate data transformations to persist directly within distributed RAM.
+
+In the context of Big Data text processing, Spark allows complex multi-stage Natural Language Processing (NLP) execution chains---such as tokenizing raw sentences, filtering stopword tokens, and mapping text to numerical vectors---to execute in parallel across multi-threaded executor environments. The architectural principles established by Zaharia et al. demonstrate that in-memory cluster computing accelerates iterative computational tasks by orders of magnitude compared to disk-bound frameworks. This framework forms the core computational infrastructure of this project, enabling local and distributed multi-core processing of the 1.6 million Twitter records via PySpark DataFrames.\\
+
+\textbf{MLlib and PySpark for Distributed Data Analysis}\\
+
+Building directly upon the core distributed computing engine of Apache Spark, Meng et al. (2016) presented \texttt{Spark MLlib} (and its high-level DataFrame API \texttt{spark.ml}), providing a native, scalable library for machine learning workflows. Their work introduced standardized transformer and estimator constructs, allowing complex feature extraction procedures to be chained into unified, reproducible execution pipelines. Meng et al. demonstrated how text transformations can seamlessly integrate statistical term frequency algorithms (\texttt{HashingTF}) with Inverse Document Frequency (\texttt{IDF}) to vectorize sparse natural language data while maintaining bounded memory footprints across distributed worker nodes.
+
+Furthermore, Meng et al. established that tree-based ensemble algorithms, specifically Random Forest, scale efficiently over sparse, high-dimensional vector spaces produced by TF-IDF transformations. By constructing an ensemble of decision trees trained on bootstrapped data sub-samples, the Random Forest classifier mitigates variance, resists over-fitting, and maintains structural generalization over informal social media text. The integration of PySpark's Python API allows these distributed capabilities---ranging from \texttt{Tokenizer} and \texttt{StopWordsRemover} to \texttt{RandomForestClassifier}---to be orchestrated efficiently, forming the exact machine learning backend used in this project's pipeline.\\
+
+\textbf{A Feature Extraction Based Improved Sentiment Analysis on Apache Spark}\\
+
+Complementing the foundational framework studies, Kanungo and Singh (2023) conducted an applied evaluation of feature extraction techniques combined with machine learning classifiers on Apache Spark for social media sentiment analysis. Their research specifically investigated how statistical feature representation methods, such as N-grams and Term Frequency--Inverse Document Frequency (TF-IDF), impact the classification accuracy of tree-based and linear algorithms when processing Twitter data within a Spark environment.
+
+Their experimental findings demonstrated that term frequency extraction combined with ensemble classification methods, such as Random Forest, achieves competitive predictive performance while significantly reducing feature dimensionality and processing latency on Big Data platforms. Furthermore, Kanungo and Singh emphasized the practical importance of optimizing text preprocessing pipelines---specifically handling stopword filtering and term weighting---to ensure high model throughput during sentiment prediction. Their work serves as a recent practical validation for the system architecture constructed in this project, which pairs HashingTF-IDF feature extraction with a Spark-based Random Forest classifier to analyze large-scale Twitter text.
+
+
+% ==============================================================================
+% CHAPTER 3
+% ==============================================================================
+\newpage
+\section{DATASET DESCRIPTION AND CHARACTERISTICS}
+
+\subsection{Dataset Overview}
+
+The project uses the Sentiment140 dataset for Twitter sentiment analysis. The dataset consists of 1.6 million tweets. Each record contains a sentiment target and several additional fields associated with the tweet.
+
+The dataset is particularly appropriate for the project because it provides a large collection of naturally occurring social media text with sentiment labels. The large number of records also provides a suitable environment for demonstrating Spark-based processing.
+
+The notebook loads the dataset using the following schema:
+
+\begin{lstlisting}[language=Python]
+schema = StructType([
+    StructField("target", IntegerType(), True),
+    StructField("id", StringType(), True),
+    StructField("date", StringType(), True),
+    StructField("query", StringType(), True),
+    StructField("user", StringType(), True),
+    StructField("text", StringType(), True)
+])
+\end{lstlisting}
+
+\subsection{Dataset Structure}
+
+The original dataset contains six attributes.
+
+\begin{table}[H]
+\centering
+\caption{Dataset Attributes}
+\begin{tabular}{lll}
+\toprule
+\textbf{Attribute} & \textbf{Data Type} & \textbf{Description} \\
+\midrule
+target & Integer & Original sentiment label \\
+id & String & Tweet identifier \\
+date & String & Tweet date and time \\
+query & String & Query field \\
+user & String & User name \\
+text & String & Original tweet text \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+
+
+\subsection{Dataset Size and Dimensionality}
+
+The dataset contains 1.6 million records and six original attributes.
+
+After selecting only the target and text fields and converting the target into a new label, the working DataFrame contains the fields:
+
+\begin{itemize}
+    \item text
+    \item label
+\end{itemize}
+
+A further preprocessing stage introduces the \texttt{clean\_text} field.
+
+The machine learning feature representation contains 10,000 hashed feature positions.
+
+
+
+\subsection{Data Characteristics}
+
+The dataset has several characteristics that influence the sentiment-analysis pipeline.
+
+First, the dataset is large, containing 1.6 million records. Second, the main predictive attribute is unstructured natural-language text. Third, the language is informal because the data originates from Twitter. Fourth, the original text includes noise such as mentions and URLs.
+
+These characteristics justify the use of a multi-stage text preprocessing and feature-extraction pipeline.
+
+\subsection{Summary of Dataset Characteristics}
+
+\begin{table}[H]
+\centering
+\caption{Summary of Dataset Characteristics}
+\begin{tabular}{p{5cm}p{8cm}}
+\toprule
+\textbf{Characteristic} & \textbf{Description} \\
+\midrule
+Dataset size & 1.6 million tweets \\
+Data type & Structured records containing unstructured text \\
+Main predictive field & Tweet text \\
+Target & Binary sentiment label \\
+Classes & Negative and Positive \\
+Class distribution & 800,000 records per class \\
+Text complexity & Informal social media language \\
+Feature representation & 10,000-dimensional hashed representation weighted using IDF \\
+Processing framework & Apache Spark through PySpark \\
+Classifier & Random Forest \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+
+% ==============================================================================
+% CHAPTER 4
+% ==============================================================================
+\newpage
+\section{TECHNOLOGIES AND SYSTEM ARCHITECTURE}
+
+\subsection{Introduction}
+
+The project combines Big Data processing, Natural Language Processing, feature engineering, and machine learning. The primary technology used for distributed data processing is Apache Spark through its Python interface, PySpark.
+
+The complete system is implemented in a Google Colab environment and uses Google Drive for dataset and model storage.
+
+\subsection{System Architecture}
+
+The architecture of the implemented system can be represented as a sequential data-processing pipeline:
+
+\[
+\text{Raw Dataset}
+\rightarrow
+\text{Spark DataFrame}
+\rightarrow
+\text{Label Conversion}
+\rightarrow
+\text{Text Cleaning}
+\rightarrow
+\text{Tokenization}
+\]
+
+\[
+\rightarrow
+\text{Stopword Removal}
+\rightarrow
+\text{HashingTF}
+\rightarrow
+\text{IDF}
+\rightarrow
+\text{Train/Test Split}
+\]
+
+\[
+\rightarrow
+\text{Random Forest}
+\rightarrow
+\text{Prediction}
+\rightarrow
+\text{Evaluation}
+\]
+
+\projectfigure{systwm_arrch.png}{0.70}
+{System Architecture of the Proposed Sentiment Analysis System}
+
+\subsection{Google Colab Environment}
+
+Google Colab is used as the execution environment for the project. It provides a browser-based Python environment suitable for running the notebook.
+
+The project mounts Google Drive to access the dataset and store generated outputs.
+
+The relevant implementation is:
+
+\begin{lstlisting}[language=Python]
+from google.colab import drive
+drive.mount('/content/drive')
+\end{lstlisting}
+
+\subsection{Python}
+
+Python is the primary programming language used in the project.
+
+Python is used for:
+
+\begin{itemize}
+    \item Spark configuration.
+    \item Data processing.
+    \item Machine learning.
+    \item Evaluation.
+    \item Visualization.
+    \item Interactive interface development.
+\end{itemize}
+
+\subsection{Apache Spark}
+
+Apache Spark is the central Big Data processing framework used in the project.
+
+Spark provides distributed data processing capabilities and supports DataFrames, transformations, actions, and machine learning through Spark ML.
+
+The project creates a Spark session using:
+
+\begin{lstlisting}[language=Python]
+spark = SparkSession.builder \
+    .appName("Sentiment140") \
+    .master("local[*]") \
+    .getOrCreate()
+\end{lstlisting}
+
+\subsection{PySpark}
+
+PySpark provides the Python interface to Apache Spark.
+
+The project uses PySpark DataFrames to load and transform the Twitter dataset. PySpark is also used to access Spark ML feature-extraction and classification components.
+
+The use of DataFrames makes it possible to perform operations such as selecting columns, creating derived columns, grouping records, and transforming text.
+
+\subsection{Spark ML}
+
+Spark ML provides the machine learning and feature-engineering components used by the project.
+
+The project uses:
+
+\begin{itemize}
+    \item Tokenizer.
+    \item StopWordsRemover.
+    \item HashingTF.
+    \item IDF.
+    \item Pipeline.
+    \item RandomForestClassifier.
+    \item MulticlassClassificationEvaluator.
+\end{itemize}
+
+These components allow the complete machine learning workflow to be represented using Spark-based transformations.
+
+\subsection{Random Forest Classifier}
+
+Random Forest is an ensemble classification algorithm based on multiple decision trees.
+
+Instead of relying on a single decision tree, the algorithm builds multiple trees and combines their predictions. In this project, the classifier is configured using:
+
+\begin{lstlisting}[language=Python]
+rf = RandomForestClassifier(
+    labelCol="label",
+    featuresCol="features",
+    numTrees=20,
+    maxDepth=8
+)
+\end{lstlisting}
+
+Therefore, the implemented model uses:
+
+\begin{itemize}
+    \item Number of trees = 20.
+    \item Maximum depth = 8.
+    \item Label column = \texttt{label}.
+    \item Feature column = \texttt{features}.
+\end{itemize}
+
+\subsection{Tokenizer}
+
+The Spark Tokenizer converts cleaned text into individual words.
+
+\begin{lstlisting}[language=Python]
+tokenizer = Tokenizer(
+    inputCol="clean_text",
+    outputCol="words"
+)
+\end{lstlisting}
+
+For example:
+
+\[
+\text{``this movie is amazing''}
+\]
+
+can be represented as:
+
+\[
+[\text{this},\text{movie},\text{is},\text{amazing}]
+\]
+
+\subsection{StopWordsRemover}
+
+StopWordsRemover removes commonly occurring words that may provide limited information for classification.
+
+The project uses Spark's default English stopword list. However, three important negation terms are explicitly retained:
+
+\begin{itemize}
+    \item not
+    \item no
+    \item never
+\end{itemize}
+
+This is an important preprocessing decision because removing negation words could alter the sentiment meaning.
+
+For example:
+
+\[
+\text{``not good''}
+\]
+
+and
+
+\[
+\text{``good''}
+\]
+
+do not express the same sentiment.
+
+
+
+
+\subsection{Visualization Libraries}
+
+The notebook uses Python visualization libraries to generate analytical plots.
+
+Matplotlib is used to create the sentiment distribution plot. Seaborn is used in the notebook for the confusion-matrix heatmap.
+
+The sentiment distribution is generated by grouping the DataFrame by label and plotting the resulting counts.
+
+
+\subsection{Data Flow Between Components}
+
+The data flow can be summarized as follows:
+
+\begin{enumerate}
+    \item Dataset is read from Google Drive.
+    \item Spark creates a DataFrame.
+    \item Target and text columns are selected.
+    \item Sentiment target is converted into a binary label.
+    \item Raw text is cleaned.
+    \item Cleaned text is tokenized.
+    \item Stopwords are removed.
+    \item Important negation words are preserved.
+    \item HashingTF generates numerical features.
+    \item IDF transforms the raw features.
+    \item Data is divided into training and testing sets.
+    \item Random Forest is trained.
+    \item Test data is classified.
+    \item Evaluation metrics are calculated.
+    \item Results are visualized and stored.
+\end{enumerate}
+
+
+
+\subsection{Architecture Characteristics}
+
+The system has the following major characteristics:
+
+\begin{itemize}
+    \item Large-scale data processing.
+    \item DataFrame-based processing.
+    \item Pipeline-based text transformation.
+    \item Fixed-dimensional numerical features.
+    \item Binary classification.
+    \item Reproducible train/test split using a fixed seed.
+    \item Machine learning evaluation.
+    \item Persistent model storage.
+    \item Interactive prediction.
+\end{itemize}
+
+
+
+% ==============================================================================
+% CHAPTER 5
+% ==============================================================================
+
+\section{DATA QUALITY ASSESSMENT AND TEXT PREPROCESSING}
+
+\subsection{Introduction}
+
+Text preprocessing is a critical stage in sentiment analysis because machine learning algorithms cannot directly process raw textual sentences. Twitter data contains multiple forms of noise, including usernames, URLs, punctuation, and informal expressions.
+
+The preprocessing stage implemented in this project converts the raw tweet text into a cleaner representation before tokenization and feature extraction.
+
+\subsection{Data Quality Assessment}
+
+The dataset is inspected after loading to verify its structure and sample content. The notebook reports 1,600,000 records.
+
+The inspection also demonstrates that the original tweet text contains Twitter-specific elements such as mentions and URLs.
+
+\subsection{Selection of Relevant Attributes}
+
+Although the original dataset contains six attributes, the sentiment classification process only requires the original target and text attributes.
+
+The notebook therefore performs:
+
+\begin{lstlisting}[language=Python]
+df = df.select("target", "text")
+\end{lstlisting}
+
+The target is subsequently transformed into the binary \texttt{label} field.
+
+\subsection{Label Preparation}
+
+The original Sentiment140 target values are converted into a binary classification format.
+
+\begin{lstlisting}[language=Python]
+df = df.withColumn(
+    "label",
+    when(col("target") == 4, 1).otherwise(0)
+).drop("target")
+\end{lstlisting}
+
+The resulting labels are:
+
+\begin{table}[H]
+\centering
+\caption{Label Conversion}
+\begin{tabular}{cc}
+\toprule
+\textbf{Original Target} & \textbf{New Label} \\
+\midrule
+0 & 0 \\
+4 & 1 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Text Cleaning Strategy}
+
+The text-cleaning stage creates a new column named \texttt{clean\_text}.
+
+The regular expression used is:
+
+\begin{lstlisting}
+r"@[A-Za-z0-9_]+|https?://\S+|[^A-Za-z0-9\s]"
+\end{lstlisting}
+
+This expression removes:
+
+\begin{itemize}
+    \item User mentions beginning with @.
+    \item HTTP and HTTPS URLs.
+    \item Characters other than letters, numbers, and whitespace.
+\end{itemize}
+
+\subsection{Removal of User Mentions}
+
+Twitter messages frequently contain usernames in the form:
+
+\[
+@\text{username}
+\]
+
+These mentions generally identify another user rather than directly expressing the sentiment of the message. The preprocessing stage removes them.
+
+For example:
+
+\begin{lstlisting}
+@switchfoot Awww, that's a bummer.
+\end{lstlisting}
+
+becomes approximately:
+
+\begin{lstlisting}
+Awww thats a bummer
+\end{lstlisting}
+
+\subsection{Removal of URLs}
+
+URLs are removed because their character sequences are generally not useful for the basic sentiment representation used in the project.
+
+For example:
+
+\begin{lstlisting}
+http://twitpic.com/2y1zl
+\end{lstlisting}
+
+is removed from the tweet.
+
+\subsection{Removal of Punctuation and Non-Alphanumeric Characters}
+
+The regular expression also removes punctuation and other non-alphanumeric characters.
+
+For example:
+
+\begin{lstlisting}
+That's a bummer!
+\end{lstlisting}
+
+is transformed into a simpler representation such as:
+
+\begin{lstlisting}
+Thats a bummer
+\end{lstlisting}
+
+This produces a cleaner tokenization input.
+
+\subsection{Text Standardization}
+
+The cleaning stage does not implement a separate explicit lowercasing operation. Therefore, the report does not claim a dedicated lowercase transformation as part of the implemented pipeline.
+
+The primary standardization performed by the notebook is removal of Twitter-specific noise and non-alphanumeric characters.
+
+\subsection{Tokenization}
+
+The cleaned text is converted into individual words using Spark's Tokenizer.
+
+\begin{lstlisting}[language=Python]
+tokenizer = Tokenizer(
+    inputCol="clean_text",
+    outputCol="words"
+)
+\end{lstlisting}
+
+The resulting column is named \texttt{words}.
+
+\subsection{Stopword Removal}
+
+The project loads Spark's default English stopword list:
+
+\begin{lstlisting}[language=Python]
+stopwords = StopWordsRemover.loadDefaultStopWords("english")
+\end{lstlisting}
+
+A StopWordsRemover object is then created:
+
+\begin{lstlisting}[language=Python]
+remover = StopWordsRemover(
+    inputCol="words",
+    outputCol="filtered_words",
+    stopWords=stopwords
+)
+\end{lstlisting}
+
+\subsection{Preservation of Negation Words}
+
+A significant preprocessing decision is the preservation of three negation words:
+
+\begin{itemize}
+    \item not
+    \item no
+    \item never
+\end{itemize}
+
+The notebook removes these words from the stopword list if they are present.
+
+\begin{lstlisting}[language=Python]
+for word in ["not", "no", "never"]:
+    if word in stopwords:
+        stopwords.remove(word)
+\end{lstlisting}
+
+This is important for sentiment classification because negation can reverse the meaning of a sentiment-bearing word.
+
+For example:
+
+\[
+\text{not good}
+\]
+
+has a different sentiment from:
+
+\[
+\text{good}
+\]
+
+Therefore, preserving negation information helps retain meaningful textual context.
+
+
+
+\subsection{Preprocessing Pipeline}
+
+The preprocessing components are combined into a single Spark Pipeline:
+
+\begin{lstlisting}[language=Python]
+pipeline = Pipeline(stages=[
+    tokenizer,
+    remover,
+    hashingTF,
+    idf
+])
+\end{lstlisting}
+
+The pipeline is fitted on the DataFrame and then transformed:
+
+\begin{lstlisting}[language=Python]
+pipeline_model = pipeline.fit(df)
+dataset = pipeline_model.transform(df)
+\end{lstlisting}
+
+\subsection{Preprocessed Dataset}
+
+After transformation, the dataset contains the original text, the cleaned text, the generated word tokens, filtered tokens, raw features, final features, and label depending on the stage of the pipeline.
+
+The important machine-learning columns are:
+
+\begin{itemize}
+    \item \texttt{features}
+    \item \texttt{label}
+\end{itemize}
+
+
+
+% ==============================================================================
+% CHAPTER 6
+% ==============================================================================
+\newpage
+\section{EXPLORATORY DATA ANALYSIS AND ANALYTICAL PROCESSING}
+
+\subsection{Introduction}
+
+Exploratory analysis is used to understand the distribution of sentiment labels and examine the processed data before and after classification.
+
+In this project, exploratory analysis is focused primarily on sentiment distribution and the structure of the processed textual data.
+
+\subsection{Analytical Dimensions}
+
+The major analytical dimensions of the project are:
+
+\begin{itemize}
+    \item Sentiment class.
+    \item Tweet text.
+    \item Cleaned tweet text.
+    \item Tokenized words.
+    \item Numerical feature representation.
+    \item Predicted sentiment.
+\end{itemize}
+
+\subsection{Sentiment Class Distribution}
+
+The notebook calculates class distribution using:
+
+\begin{lstlisting}[language=Python]
+class_distribution = df.groupBy("label").count()
+class_distribution.show()
+\end{lstlisting}
+
+The output is:
+
+\begin{lstlisting}
++-----+------+
+|label| count|
++-----+------+
+|    1|800000|
+|    0|800000|
++-----+------+
+\end{lstlisting}
+
+This demonstrates an equal distribution between the two sentiment classes.
+
+\subsection{Negative Sentiment Class}
+
+The negative class is represented using:
+
+\[
+label=0
+\]
+
+The dataset contains 800,000 records in this class.
+
+The tweets in this class may contain negative expressions, dissatisfaction, frustration, or other negative sentiment-bearing content.
+
+\subsection{Positive Sentiment Class}
+
+The positive class is represented using:
+
+\[
+label=1
+\]
+
+The dataset contains 800,000 records in this class.
+
+The tweets may express positive reactions, satisfaction, enjoyment, approval, or other positive sentiment.
+
+
+
+\subsection{Feature Vector Generation}
+
+After preprocessing, the text is transformed into sparse feature vectors.
+
+The notebook displays examples similar to:
+
+\begin{lstlisting}
+(10000,[1528,2306,...], ...)
+\end{lstlisting}
+
+The number 10,000 represents the configured feature-vector dimensionality.
+
+\subsection{Training and Testing Data Preparation}
+
+The transformed dataset is divided using:
+
+\begin{lstlisting}[language=Python]
+train_data, test_data = dataset.randomSplit(
+    [0.8, 0.2],
+    seed=42
+)
+\end{lstlisting}
+
+Therefore:
+
+\[
+Training = 80\%
+\]
+
+and
+
+\[
+Testing = 20\%
+\]
+
+The seed value of 42 makes the split reproducible.
+
+\subsection{Training Dataset}
+
+The training dataset is used to learn the relationship between the generated feature vectors and the sentiment labels.
+
+The Random Forest model is fitted using:
+
+\begin{lstlisting}[language=Python]
+rf_model = rf.fit(train_data)
+\end{lstlisting}
+
+\subsection{Testing Dataset}
+
+The testing dataset is kept separate from the training data and is used to measure model performance.
+
+Predictions are generated using:
+
+\begin{lstlisting}[language=Python]
+predictions = rf_model.transform(test_data)
+\end{lstlisting}
+
+\subsection{Random Forest Training}
+
+The Random Forest configuration is:
+
+\begin{table}[H]
+\centering
+\caption{Random Forest Configuration}
+\begin{tabular}{ll}
+\toprule
+\textbf{Parameter} & \textbf{Value} \\
+\midrule
+Algorithm & Random Forest \\
+Number of trees & 20 \\
+Maximum depth & 8 \\
+Label column & label \\
+Feature column & features \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The model combines the predictions from multiple decision trees to obtain the final classification.
+
+\subsection{Model Prediction}
+
+After training, the model generates a prediction for each test record.
+
+A prediction is represented numerically:
+
+\[
+0.0 = \text{Negative}
+\]
+
+\[
+1.0 = \text{Positive}
+\]
+
+The prediction output is stored in the \texttt{prediction} column.
+
+
+% ==============================================================================
+% CHAPTER 7
+% ==============================================================================
+\newpage
+\section{MODEL EVALUATION, VISUALIZATION AND OUTPUT GENERATION}
+
+\subsection{Introduction}
+
+Model evaluation determines how effectively the trained classifier predicts the sentiment of unseen test data.
+
+The project uses Spark's MulticlassClassificationEvaluator to calculate several metrics. Although the task is binary classification, the Spark evaluator provides standard classification measures.
+
+\subsection{Evaluation Workflow}
+
+The evaluation process consists of:
+
+\begin{enumerate}
+    \item Transforming the testing dataset using the trained model.
+    \item Generating predicted labels.
+    \item Comparing predicted labels with actual labels.
+    \item Computing evaluation metrics.
+    \item Visualizing the confusion matrix.
+    \item Examining model feature importance.
+\end{enumerate}
+
+\subsection{Accuracy}
+
+Accuracy measures the proportion of correctly classified records.
+
+The general formula is:
+
+\[
+Accuracy =
+\frac{TP+TN}{TP+TN+FP+FN}
+\]
+
+where:
+
+\begin{itemize}
+    \item $TP$ = True Positives.
+    \item $TN$ = True Negatives.
+    \item $FP$ = False Positives.
+    \item $FN$ = False Negatives.
+\end{itemize}
+
+The notebook reports:
+
+\[
+Accuracy = 0.6744
+\]
+
+or:
+
+\[
+\boxed{67.44\%}
+\]
+
+
+
+\subsection{Weighted Precision}
+
+The notebook reports:
+
+\[
+Weighted\ Precision = 0.6744
+\]
+
+Precision measures the proportion of predicted positive instances that are actually positive for a given class. Weighted precision combines class-specific precision values according to class support.
+
+\subsection{Weighted Recall}
+
+The notebook reports:
+
+\[
+Weighted\ Recall = 0.6744
+\]
+
+Recall measures the ability of the classifier to identify instances belonging to a class.
+
+\subsection{F1-Score}
+
+The F1-score combines precision and recall.
+
+The general formula is:
+
+\[
+F1 =
+2\frac{Precision \times Recall}
+{Precision + Recall}
+\]
+
+The notebook reports:
+
+\[
+F1 = 0.6744
+\]
+
+\subsection{Overall Evaluation Results}
+
+\begin{table}[H]
+\centering
+\caption{Model Evaluation Results}
+\begin{tabular}{lc}
+\toprule
+\textbf{Metric} & \textbf{Score} \\
+\midrule
+Accuracy & 0.6744 \\
+Weighted Precision & 0.6744 \\
+Weighted Recall & 0.6744 \\
+F1-score & 0.6744 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The equality of these reported values reflects the metric outputs generated by the notebook.
+
+\subsection{Confusion Matrix}
+
+A confusion matrix provides a detailed view of classification results by comparing actual and predicted labels.
+
+
+
+The resulting matrix is visualized as a heatmap.
+
+\projectfigure{confusion_mat.png}{0.70}
+{Confusion Matrix of the Random Forest Classifier}
+
+The matrix has actual sentiment on one axis and predicted sentiment on the other axis. The diagonal cells represent correctly classified instances, while the off-diagonal cells represent classification errors.
+
+The confusion matrix allows the system to distinguish between:
+
+\begin{itemize}
+    \item Correctly classified negative tweets.
+    \item Negative tweets incorrectly classified as positive.
+    \item Positive tweets incorrectly classified as negative.
+    \item Correctly classified positive tweets.
+\end{itemize}
+
+The exact numerical cell values should be taken directly from the generated notebook heatmap if they are required in the final printed report.
+
+
+\subsection{Sample Prediction}
+
+The notebook evaluates sample texts using the trained model.
+
+Examples include:
+
+\begin{lstlisting}
+I absolutely love this phone
+This movie is the worst ever
+The food was amazing
+I hate this product
+\end{lstlisting}
+
+The resulting predictions are:
+
+\begin{table}[H]
+\centering
+\caption{Sample Prediction Output}
+\begin{tabular}{p{9cm}c}
+\toprule
+\textbf{Text} & \textbf{Prediction} \\
+\midrule
+I absolutely love this phone & 0.0 \\
+This movie is the worst ever & 0.0 \\
+The food was amazing & 1.0 \\
+I hate this product & 0.0 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+These outputs demonstrate that the trained classifier can accept new textual input after applying the same preprocessing pipeline.
+
+
+
+
+\subsection{Interactive Prediction Workflow}
+
+The interactive workflow is:
+
+\[
+\text{User Input}
+\rightarrow
+\text{Spark DataFrame}
+\rightarrow
+\text{Preprocessing Pipeline}
+\rightarrow
+\text{Feature Vector}
+\]
+
+\[
+\rightarrow
+\text{Random Forest}
+\rightarrow
+\text{Prediction}
+\rightarrow
+\text{Positive/Negative Output}
+\]
+
+The interface displays a positive or negative result depending on the numerical prediction.
+
+\projectfigure{live_sentiment_analyzer.jpeg}{0.75}
+{Live Sentiment Analyzer}
+
+\subsection{Result Summary}
+
+\begin{table}[H]
+\centering
+\caption{Summary of Project Results}
+\begin{tabular}{p{7cm}p{6cm}}
+\toprule
+\textbf{Result Category} & \textbf{Result} \\
+\midrule
+Dataset size & 1,600,000 tweets \\
+Negative class & 800,000 \\
+Positive class & 800,000 \\
+Feature dimensions & 10,000 \\
+Train/test split & 80/20 \\
+Random Forest trees & 20 \\
+Maximum depth & 8 \\
+Accuracy & 67.44\% \\
+Weighted precision & 0.6744 \\
+Weighted recall & 0.6744 \\
+F1-score & 0.6744 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+% ==============================================================================
+% CHAPTER 8
+% ==============================================================================
+\newpage
+\section{LIMITATIONS AND FUTURE ENHANCEMENTS}
+
+\subsection{Introduction}
+
+Although the implemented system successfully demonstrates large-scale sentiment classification using PySpark and Random Forest, it has several limitations. These limitations arise from the characteristics of the dataset, the text preprocessing strategy, the feature representation, and the selected machine learning model.
+
+\subsection{Limitations}
+
+\textbf{Dataset Dependency:} The system relies on the Sentiment140 dataset, so its performance depends on the quality, characteristics, and labels of the dataset.
+
+\textbf{Data Freshness:} The dataset contains historical Twitter data and may not represent current slang, trends, and changing language patterns.
+
+\textbf{Informal Language:} Tweets often contain abbreviations, slang, misspellings, and informal expressions that are difficult to process completely.
+
+\textbf{Limited Context Understanding:} The token-based feature representation may not fully understand the context and relationships between words in a sentence.
+
+\textbf{Negation Handling:} Although words such as not, no, and never are preserved, the system may not completely understand their effect on sentiment.
+
+\textbf{Sarcasm Detection:} Sarcastic statements can be difficult to classify correctly because the literal meaning may differ from the intended sentiment.
+
+\textbf{Feature Representation:} HashingTF provides efficient numerical features, but hash collisions can occur and the resulting features are not directly human-readable.
+
+\textbf{Random Forest Limitation:} Random Forest may not always be the most suitable algorithm for high-dimensional and sparse text data.
+
+\textbf{Model Accuracy:} The model achieves approximately 67.44 percentage accuracy, meaning that some sentiment predictions are still incorrect.
+
+\textbf{Evaluation Scope:} The system uses accuracy, precision, recall, and F1-score, but additional class-specific evaluation could provide deeper insights.
+
+\textbf{Training-Time Measurement:} The recorded training time does not accurately represent the actual Random Forest training duration because of the timing implementation.
+
+\textbf{Domain Generalization:} The model is trained specifically on Twitter data, so its performance may vary when applied to other types of text such as reviews or news articles.
+
+\subsection{Future Enhancement}
+
+\textbf{Automated Data Ingestion:} The system can be connected to suitable social media APIs to automatically collect and process new text using the existing Spark pipeline.\\
+\textbf{Advanced Text Normalization:} Future versions can include spelling correction, slang normalization, emoji processing, repeated-character handling, and hashtag interpretation.\\
+\textbf{Advanced Negation Processing:} The system can identify the scope of negation and understand phrases such as “not good” as a complete negative expression.\\
+\textbf{Hyperparameter Tuning:} Different values for the number of trees, maximum depth, and feature settings can be tested to improve Random Forest performance.\\
+\textbf{Alternative Machine Learning Models:} Models such as Logistic Regression, Linear SVM, Naive Bayes, and Gradient-based classifiers can be compared with Random Forest.\\
+\textbf{Advanced NLP Models:} Transformer-based models can be explored to better understand contextual relationships and improve sentiment classification.\\
+\textbf{Interactive Dashboard:} A web-based dashboard can provide text input, sentiment prediction, confidence scores, sentiment distribution, model performance, and prediction history.
+\textbf{Real-Time Sentiment Analysis:} The system can be extended to process live social media data continuously and display sentiment results through a dashboard.\\
+\subsection{Section Summary}
+
+The implemented project provides a complete scalable sentiment-analysis workflow, but several opportunities exist for improvement. The main areas include improved text understanding, advanced feature representations, model optimization, and real-time deployment.
+
+% ==============================================================================
+% CHAPTER 9
+% ==============================================================================
+\newpage
+\section{CONCLUSION}
+
+The project successfully demonstrates the application of Big Data processing, Natural Language Processing, and machine learning techniques for large-scale Twitter sentiment analysis. The Sentiment140 dataset containing 1.6 million tweets was processed using Apache Spark and PySpark. The tweets underwent preprocessing steps such as removing URLs, mentions, punctuation, tokenization, and stopword removal, while preserving important negation words such as “not”, “no”, and “never”.
+
+The processed text was converted into numerical features using HashingTF and IDF, and a Random Forest classifier was trained using an 80:20 training-testing split. The model achieved an accuracy of approximately 67.44%, demonstrating useful sentiment classification capability.
+
+The project also included model evaluation, prediction result storage, model saving, and an interactive interface for classifying new text. Overall, the project provides a complete and scalable sentiment-analysis pipeline and demonstrates the practical use of Apache Spark for processing large-scale social media data. Future improvements can focus on advanced NLP models, better text normalization, hyperparameter tuning, and real-time sentiment analysis.
+
+% ==============================================================================
+% CHAPTER 10
+% ==============================================================================
+\newpage
+\section{REFERENCES}
+
+\begin{enumerate}
+
+\item Go, A., Bhayani, R., and Huang, L., ``Twitter Sentiment Classification using Distant Supervision,'' Stanford University, 2009.
+
+\item Kanungo, P., & Singh, H. (2023). A feature extraction based improved sentiment analysis on Apache Spark for real-time Twitter data. Scalable Computing: Practice and Experience, 24(4), 847–855. https://doi.org/10.12694/scpe.v24i4.2343.
+
+\item Meng, X., Bradley, J., Yavuz, B., Sparks, E., Venkataraman, S., Liu, D., Freeman, J., Tsai, D., Meng, M., Zheng, S., & Talwalkar, A. (2016). MLlib: Machine learning in Apache Spark. Journal of Machine Learning Research, 17(34).
+
+\item Zaharia, M., Chowdhury, M., Franklin, M. J., Shenker, S., & Stoica, I. (2010). Spark: Cluster computing with working sets. Proceedings of the 2nd USENIX Conference on Hot Topics in Cloud Computing (HotCloud).
+
+\end{enumerate}
+
+% ==============================================================================
+% APPENDIX A
+% ==============================================================================
+
+\newpage
+\appendix
+
+\section{APPENDIX A: IMPORTANT PROJECT PARAMETERS}
+
+\begin{table}[H]
+\centering
+\caption{Important Implementation Parameters}
+\begin{tabular}{p{7cm}p{6cm}}
+\toprule
+\textbf{Parameter} & \textbf{Implemented Value} \\
+\midrule
+Dataset & Sentiment140 \\
+Number of records & 1,600,000 \\
+Negative records & 800,000 \\
+Positive records & 800,000 \\
+Classification & Binary \\
+Feature extraction & HashingTF + IDF \\
+Hashing features & 10,000 \\
+Train/test ratio & 80:20 \\
+Random seed & 42 \\
+Random Forest trees & 20 \\
+Random Forest maximum depth & 8 \\
+Accuracy & 67.44\% \\
+Weighted precision & 0.6744 \\
+Weighted recall & 0.6744 \\
+F1-score & 0.6744 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+% ============================================================
+% APPENDIX B
+% ============================================================
+\section{APPENDIX B: CODE}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.90\textwidth]{spark_initialization.jpeg}
+\caption{spark Session Initialization}
+\label{fig:appendix1}
+\end{figure}
+
+\newpage
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.90\textwidth]{Random Forest Model.jpeg}
+\caption{Random Forest Model}
+\label{fig:appendix2}
+\end{figure}
+
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=1.1\textwidth]{TF-IDF Feature Extraction.jpeg}
+\caption{TF-IDF Feature Extraction}
+\label{fig:appendix3}
+\end{figure}
+% ==============================================================================
+% END DOCUMENT
+% ==============================================================================
+
+\end{document}
+```
